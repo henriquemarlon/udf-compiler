@@ -1,0 +1,4205 @@
+Terminals unused in grammar
+
+    tPRIVATE
+
+
+State 18 conflicts: 1 shift/reduce
+State 37 conflicts: 1 shift/reduce
+State 50 conflicts: 1 shift/reduce
+State 67 conflicts: 3 shift/reduce
+State 100 conflicts: 3 shift/reduce
+State 132 conflicts: 3 shift/reduce
+State 170 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: file $end
+
+    1 file: declarations
+
+    2 declarations: declaration
+    3             | declarations declaration
+
+    4 declaration: variable_decl ';'
+    5            | function_decl
+    6            | function_def
+
+    7 qualifier_opt: ε
+    8              | tPUBLIC
+    9              | tFORWARD
+
+   10 type: tINT
+   11     | tREAL
+   12     | tSTRING_TYPE
+   13     | tVOID
+   14     | tAUTO
+   15     | tPTR '<' type '>'
+   16     | tTENSOR '<' tensor_dims '>'
+
+   17 tensor_dims: tINTEGER
+   18            | tensor_dims ',' tINTEGER
+
+   19 reshape_dims: tINTEGER
+   20             | reshape_dims ',' tINTEGER
+
+   21 variable_decl: qualifier_opt type tIDENTIFIER '=' expr
+   22              | qualifier_opt type tIDENTIFIER
+   23              | qualifier_opt tAUTO tIDENTIFIER '=' expr
+
+   24 vardecs: variable_decl ';'
+   25        | vardecs variable_decl ';'
+
+   26 opt_vardecs: ε
+   27            | vardecs
+
+   28 function_decl: qualifier_opt type tIDENTIFIER '(' parameters ')'
+   29              | qualifier_opt type tIDENTIFIER '(' ')'
+
+   30 function_def: qualifier_opt type tIDENTIFIER '(' parameters ')' block
+   31             | qualifier_opt type tIDENTIFIER '(' ')' block
+
+   32 parameters: variable_decl
+   33           | parameters ',' variable_decl
+
+   34 opt_instructions: ε
+   35                 | stmts
+
+   36 block: '{' opt_vardecs opt_instructions '}'
+
+   37 stmts: stmt
+   38      | stmts stmt
+
+   39 stmt: expr ';'
+   40     | tWRITE exprs ';'
+   41     | tWRITELN exprs ';'
+   42     | tBREAK
+   43     | tCONTINUE
+   44     | return
+   45     | tIF '(' expr ')' stmt
+   46     | tIF '(' expr ')' stmt elif_chain
+   47     | tFOR '(' opt_forinit ';' exprs_opt ';' exprs_opt ')' stmt
+   48     | block
+
+   49 return: tRETURN ';'
+   50       | tRETURN expr ';'
+
+   51 elif_chain: tELIF '(' expr ')' stmt
+   52           | tELIF '(' expr ')' stmt elif_chain
+   53           | tELSE stmt
+
+   54 exprs: expr
+   55      | exprs ',' expr
+   56      | exprs expr
+
+   57 exprs_opt: ε
+   58          | exprs
+
+   59 expr: literal
+   60     | lval
+   61     | lval '=' expr
+   62     | tINPUT
+   63     | tNULLPTR
+   64     | tOBJECTS '(' expr ')'
+   65     | tSIZEOF '(' expr ')'
+   66     | '+' expr
+   67     | '-' expr
+   68     | '~' expr
+   69     | lval '?'
+   70     | expr '+' expr
+   71     | expr '-' expr
+   72     | expr '*' expr
+   73     | expr '/' expr
+   74     | expr '%' expr
+   75     | expr tCONTRACT expr
+   76     | expr '<' expr
+   77     | expr '>' expr
+   78     | expr tLE expr
+   79     | expr tGE expr
+   80     | expr tEQ expr
+   81     | expr tAND expr
+   82     | expr tOR expr
+   83     | expr tNE expr
+   84     | '(' expr ')'
+   85     | tIDENTIFIER '(' exprs ')'
+   86     | tIDENTIFIER '(' ')'
+   87     | expr '.' tCAPACITY
+   88     | expr '.' tRANK
+   89     | expr '.' tDIMS
+   90     | expr '.' tDIM '(' expr ')'
+   91     | expr '.' tRESHAPE '(' reshape_dims ')'
+   92     | tensor_literal
+
+   93 literal: tINTEGER
+   94        | tDOUBLE
+   95        | string
+
+   96 fordec: type tIDENTIFIER '=' expr
+
+   97 fordecs: fordec
+   98        | fordecs ',' fordec
+
+   99 opt_forinit: ε
+  100            | fordecs
+  101            | tAUTO tIDENTIFIER '=' expr
+  102            | exprs
+
+  103 string: tSTRING
+  104       | string tSTRING
+
+  105 tensor_literal: '[' exprs ']'
+
+  106 lval: tIDENTIFIER
+  107     | expr '[' expr ']'
+  108     | expr '@' '(' exprs ')'
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '%' (37) 74
+    '(' (40) 28 29 30 31 45 46 47 51 52 64 65 84 85 86 90 91 108
+    ')' (41) 28 29 30 31 45 46 47 51 52 64 65 84 85 86 90 91 108
+    '*' (42) 72
+    '+' (43) 66 70
+    ',' (44) 18 20 33 55 98
+    '-' (45) 67 71
+    '.' (46) 87 88 89 90 91
+    '/' (47) 73
+    ';' (59) 4 24 25 39 40 41 47 49 50
+    '<' (60) 15 16 76
+    '=' (61) 21 23 61 96 101
+    '>' (62) 15 16 77
+    '?' (63) 69
+    '@' (64) 108
+    '[' (91) 105 107
+    ']' (93) 105 107
+    '{' (123) 36
+    '}' (125) 36
+    '~' (126) 68
+    error (256)
+    tINTEGER <i> (258) 17 18 19 20 93
+    tDOUBLE <d> (259) 94
+    tIDENTIFIER <s> (260) 21 22 23 28 29 30 31 85 86 96 101 106
+    tSTRING <s> (261) 103 104
+    tINT (262) 10
+    tREAL (263) 11
+    tSTRING_TYPE (264) 12
+    tTENSOR (265) 16
+    tPTR (266) 15
+    tVOID (267) 13
+    tAUTO (268) 14 23 101
+    tPUBLIC (269) 8
+    tFORWARD (270) 9
+    tPRIVATE (271)
+    tIF (272) 45 46
+    tELIF (273) 51 52
+    tELSE (274) 53
+    tFOR (275) 47
+    tBREAK (276) 42
+    tCONTINUE (277) 43
+    tRETURN (278) 49 50
+    tWRITE (279) 40
+    tWRITELN (280) 41
+    tINPUT (281) 62
+    tNULLPTR (282) 63
+    tOBJECTS (283) 64
+    tSIZEOF (284) 65
+    tCAPACITY (285) 87
+    tRANK (286) 88
+    tDIMS (287) 89
+    tDIM (288) 90
+    tRESHAPE (289) 91
+    tCONTRACT (290) 75
+    tGE (291) 79
+    tLE (292) 78
+    tEQ (293) 80
+    tNE (294) 83
+    tIFX (295)
+    tOR (296) 82
+    tAND (297) 81
+    tUNARY (298)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (64)
+        on left: 0
+    file (65)
+        on left: 1
+        on right: 0
+    declarations <sequence> (66)
+        on left: 2 3
+        on right: 1 3
+    declaration <node> (67)
+        on left: 4 5 6
+        on right: 2 3
+    qualifier_opt <qualifier_val> (68)
+        on left: 7 8 9
+        on right: 21 22 23 28 29 30 31
+    type <type> (69)
+        on left: 10 11 12 13 14 15 16
+        on right: 15 21 22 28 29 30 31 96
+    tensor_dims <sequence> (70)
+        on left: 17 18
+        on right: 16 18
+    reshape_dims <sequence> (71)
+        on left: 19 20
+        on right: 20 91
+    variable_decl <node> (72)
+        on left: 21 22 23
+        on right: 4 24 25 32 33
+    vardecs <sequence> (73)
+        on left: 24 25
+        on right: 25 27
+    opt_vardecs <sequence> (74)
+        on left: 26 27
+        on right: 36
+    function_decl <node> (75)
+        on left: 28 29
+        on right: 5
+    function_def <node> (76)
+        on left: 30 31
+        on right: 6
+    parameters <sequence> (77)
+        on left: 32 33
+        on right: 28 30 33
+    opt_instructions <sequence> (78)
+        on left: 34 35
+        on right: 36
+    block <block> (79)
+        on left: 36
+        on right: 30 31 48
+    stmts <sequence> (80)
+        on left: 37 38
+        on right: 35 38
+    stmt <node> (81)
+        on left: 39 40 41 42 43 44 45 46 47 48
+        on right: 37 38 45 46 47 51 52 53
+    return <node> (82)
+        on left: 49 50
+        on right: 44
+    elif_chain <node> (83)
+        on left: 51 52 53
+        on right: 46 52
+    exprs <sequence> (84)
+        on left: 54 55 56
+        on right: 40 41 55 56 58 85 102 105 108
+    exprs_opt <sequence> (85)
+        on left: 57 58
+        on right: 47
+    expr <expression> (86)
+        on left: 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92
+        on right: 21 23 39 45 46 50 51 52 54 55 56 61 64 65 66 67 68 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 87 88 89 90 91 96 101 107 108
+    literal <expression> (87)
+        on left: 93 94 95
+        on right: 59
+    fordec <node> (88)
+        on left: 96
+        on right: 97 98
+    fordecs <sequence> (89)
+        on left: 97 98
+        on right: 98 100
+    opt_forinit <sequence> (90)
+        on left: 99 100 101 102
+        on right: 47
+    string <s> (91)
+        on left: 103 104
+        on right: 95 104
+    tensor_literal <expression> (92)
+        on left: 105
+        on right: 92
+    lval <lvalue> (93)
+        on left: 106 107 108
+        on right: 60 61 69
+
+
+State 0
+
+    0 $accept: • file $end
+
+    tPUBLIC   shift, and go to state 1
+    tFORWARD  shift, and go to state 2
+
+    $default  reduce using rule 7 (qualifier_opt)
+
+    file           go to state 3
+    declarations   go to state 4
+    declaration    go to state 5
+    qualifier_opt  go to state 6
+    variable_decl  go to state 7
+    function_decl  go to state 8
+    function_def   go to state 9
+
+
+State 1
+
+    8 qualifier_opt: tPUBLIC •
+
+    $default  reduce using rule 8 (qualifier_opt)
+
+
+State 2
+
+    9 qualifier_opt: tFORWARD •
+
+    $default  reduce using rule 9 (qualifier_opt)
+
+
+State 3
+
+    0 $accept: file • $end
+
+    $end  shift, and go to state 10
+
+
+State 4
+
+    1 file: declarations •
+    3 declarations: declarations • declaration
+
+    tPUBLIC   shift, and go to state 1
+    tFORWARD  shift, and go to state 2
+
+    $end      reduce using rule 1 (file)
+    $default  reduce using rule 7 (qualifier_opt)
+
+    declaration    go to state 11
+    qualifier_opt  go to state 6
+    variable_decl  go to state 7
+    function_decl  go to state 8
+    function_def   go to state 9
+
+
+State 5
+
+    2 declarations: declaration •
+
+    $default  reduce using rule 2 (declarations)
+
+
+State 6
+
+   21 variable_decl: qualifier_opt • type tIDENTIFIER '=' expr
+   22              | qualifier_opt • type tIDENTIFIER
+   23              | qualifier_opt • tAUTO tIDENTIFIER '=' expr
+   28 function_decl: qualifier_opt • type tIDENTIFIER '(' parameters ')'
+   29              | qualifier_opt • type tIDENTIFIER '(' ')'
+   30 function_def: qualifier_opt • type tIDENTIFIER '(' parameters ')' block
+   31             | qualifier_opt • type tIDENTIFIER '(' ')' block
+
+    tINT          shift, and go to state 12
+    tREAL         shift, and go to state 13
+    tSTRING_TYPE  shift, and go to state 14
+    tTENSOR       shift, and go to state 15
+    tPTR          shift, and go to state 16
+    tVOID         shift, and go to state 17
+    tAUTO         shift, and go to state 18
+
+    type  go to state 19
+
+
+State 7
+
+    4 declaration: variable_decl • ';'
+
+    ';'  shift, and go to state 20
+
+
+State 8
+
+    5 declaration: function_decl •
+
+    $default  reduce using rule 5 (declaration)
+
+
+State 9
+
+    6 declaration: function_def •
+
+    $default  reduce using rule 6 (declaration)
+
+
+State 10
+
+    0 $accept: file $end •
+
+    $default  accept
+
+
+State 11
+
+    3 declarations: declarations declaration •
+
+    $default  reduce using rule 3 (declarations)
+
+
+State 12
+
+   10 type: tINT •
+
+    $default  reduce using rule 10 (type)
+
+
+State 13
+
+   11 type: tREAL •
+
+    $default  reduce using rule 11 (type)
+
+
+State 14
+
+   12 type: tSTRING_TYPE •
+
+    $default  reduce using rule 12 (type)
+
+
+State 15
+
+   16 type: tTENSOR • '<' tensor_dims '>'
+
+    '<'  shift, and go to state 21
+
+
+State 16
+
+   15 type: tPTR • '<' type '>'
+
+    '<'  shift, and go to state 22
+
+
+State 17
+
+   13 type: tVOID •
+
+    $default  reduce using rule 13 (type)
+
+
+State 18
+
+   14 type: tAUTO •
+   23 variable_decl: qualifier_opt tAUTO • tIDENTIFIER '=' expr
+
+    tIDENTIFIER  shift, and go to state 23
+
+    tIDENTIFIER  [reduce using rule 14 (type)]
+
+
+State 19
+
+   21 variable_decl: qualifier_opt type • tIDENTIFIER '=' expr
+   22              | qualifier_opt type • tIDENTIFIER
+   28 function_decl: qualifier_opt type • tIDENTIFIER '(' parameters ')'
+   29              | qualifier_opt type • tIDENTIFIER '(' ')'
+   30 function_def: qualifier_opt type • tIDENTIFIER '(' parameters ')' block
+   31             | qualifier_opt type • tIDENTIFIER '(' ')' block
+
+    tIDENTIFIER  shift, and go to state 24
+
+
+State 20
+
+    4 declaration: variable_decl ';' •
+
+    $default  reduce using rule 4 (declaration)
+
+
+State 21
+
+   16 type: tTENSOR '<' • tensor_dims '>'
+
+    tINTEGER  shift, and go to state 25
+
+    tensor_dims  go to state 26
+
+
+State 22
+
+   15 type: tPTR '<' • type '>'
+
+    tINT          shift, and go to state 12
+    tREAL         shift, and go to state 13
+    tSTRING_TYPE  shift, and go to state 14
+    tTENSOR       shift, and go to state 15
+    tPTR          shift, and go to state 16
+    tVOID         shift, and go to state 17
+    tAUTO         shift, and go to state 27
+
+    type  go to state 28
+
+
+State 23
+
+   23 variable_decl: qualifier_opt tAUTO tIDENTIFIER • '=' expr
+
+    '='  shift, and go to state 29
+
+
+State 24
+
+   21 variable_decl: qualifier_opt type tIDENTIFIER • '=' expr
+   22              | qualifier_opt type tIDENTIFIER •
+   28 function_decl: qualifier_opt type tIDENTIFIER • '(' parameters ')'
+   29              | qualifier_opt type tIDENTIFIER • '(' ')'
+   30 function_def: qualifier_opt type tIDENTIFIER • '(' parameters ')' block
+   31             | qualifier_opt type tIDENTIFIER • '(' ')' block
+
+    '='  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 22 (variable_decl)
+
+
+State 25
+
+   17 tensor_dims: tINTEGER •
+
+    $default  reduce using rule 17 (tensor_dims)
+
+
+State 26
+
+   16 type: tTENSOR '<' tensor_dims • '>'
+   18 tensor_dims: tensor_dims • ',' tINTEGER
+
+    '>'  shift, and go to state 32
+    ','  shift, and go to state 33
+
+
+State 27
+
+   14 type: tAUTO •
+
+    $default  reduce using rule 14 (type)
+
+
+State 28
+
+   15 type: tPTR '<' type • '>'
+
+    '>'  shift, and go to state 34
+
+
+State 29
+
+   23 variable_decl: qualifier_opt tAUTO tIDENTIFIER '=' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 48
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 30
+
+   21 variable_decl: qualifier_opt type tIDENTIFIER '=' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 53
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 31
+
+   28 function_decl: qualifier_opt type tIDENTIFIER '(' • parameters ')'
+   29              | qualifier_opt type tIDENTIFIER '(' • ')'
+   30 function_def: qualifier_opt type tIDENTIFIER '(' • parameters ')' block
+   31             | qualifier_opt type tIDENTIFIER '(' • ')' block
+
+    tPUBLIC   shift, and go to state 1
+    tFORWARD  shift, and go to state 2
+    ')'       shift, and go to state 54
+
+    $default  reduce using rule 7 (qualifier_opt)
+
+    qualifier_opt  go to state 55
+    variable_decl  go to state 56
+    parameters     go to state 57
+
+
+State 32
+
+   16 type: tTENSOR '<' tensor_dims '>' •
+
+    $default  reduce using rule 16 (type)
+
+
+State 33
+
+   18 tensor_dims: tensor_dims ',' • tINTEGER
+
+    tINTEGER  shift, and go to state 58
+
+
+State 34
+
+   15 type: tPTR '<' type '>' •
+
+    $default  reduce using rule 15 (type)
+
+
+State 35
+
+   93 literal: tINTEGER •
+
+    $default  reduce using rule 93 (literal)
+
+
+State 36
+
+   94 literal: tDOUBLE •
+
+    $default  reduce using rule 94 (literal)
+
+
+State 37
+
+   85 expr: tIDENTIFIER • '(' exprs ')'
+   86     | tIDENTIFIER • '(' ')'
+  106 lval: tIDENTIFIER •
+
+    '('  shift, and go to state 59
+
+    '('       [reduce using rule 106 (lval)]
+    $default  reduce using rule 106 (lval)
+
+
+State 38
+
+  103 string: tSTRING •
+
+    $default  reduce using rule 103 (string)
+
+
+State 39
+
+   62 expr: tINPUT •
+
+    $default  reduce using rule 62 (expr)
+
+
+State 40
+
+   63 expr: tNULLPTR •
+
+    $default  reduce using rule 63 (expr)
+
+
+State 41
+
+   64 expr: tOBJECTS • '(' expr ')'
+
+    '('  shift, and go to state 60
+
+
+State 42
+
+   65 expr: tSIZEOF • '(' expr ')'
+
+    '('  shift, and go to state 61
+
+
+State 43
+
+   68 expr: '~' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 62
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 44
+
+   66 expr: '+' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 63
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 45
+
+   67 expr: '-' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 64
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 46
+
+   84 expr: '(' • expr ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 65
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 47
+
+  105 tensor_literal: '[' • exprs ']'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    exprs           go to state 66
+    expr            go to state 67
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 48
+
+   23 variable_decl: qualifier_opt tAUTO tIDENTIFIER '=' expr •
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 23 (variable_decl)
+
+
+State 49
+
+   59 expr: literal •
+
+    $default  reduce using rule 59 (expr)
+
+
+State 50
+
+   95 literal: string •
+  104 string: string • tSTRING
+
+    tSTRING  shift, and go to state 85
+
+    tSTRING   [reduce using rule 95 (literal)]
+    $default  reduce using rule 95 (literal)
+
+
+State 51
+
+   92 expr: tensor_literal •
+
+    $default  reduce using rule 92 (expr)
+
+
+State 52
+
+   60 expr: lval •
+   61     | lval • '=' expr
+   69     | lval • '?'
+
+    '='  shift, and go to state 86
+    '?'  shift, and go to state 87
+
+    $default  reduce using rule 60 (expr)
+
+
+State 53
+
+   21 variable_decl: qualifier_opt type tIDENTIFIER '=' expr •
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 21 (variable_decl)
+
+
+State 54
+
+   29 function_decl: qualifier_opt type tIDENTIFIER '(' ')' •
+   31 function_def: qualifier_opt type tIDENTIFIER '(' ')' • block
+
+    '{'  shift, and go to state 88
+
+    $default  reduce using rule 29 (function_decl)
+
+    block  go to state 89
+
+
+State 55
+
+   21 variable_decl: qualifier_opt • type tIDENTIFIER '=' expr
+   22              | qualifier_opt • type tIDENTIFIER
+   23              | qualifier_opt • tAUTO tIDENTIFIER '=' expr
+
+    tINT          shift, and go to state 12
+    tREAL         shift, and go to state 13
+    tSTRING_TYPE  shift, and go to state 14
+    tTENSOR       shift, and go to state 15
+    tPTR          shift, and go to state 16
+    tVOID         shift, and go to state 17
+    tAUTO         shift, and go to state 18
+
+    type  go to state 90
+
+
+State 56
+
+   32 parameters: variable_decl •
+
+    $default  reduce using rule 32 (parameters)
+
+
+State 57
+
+   28 function_decl: qualifier_opt type tIDENTIFIER '(' parameters • ')'
+   30 function_def: qualifier_opt type tIDENTIFIER '(' parameters • ')' block
+   33 parameters: parameters • ',' variable_decl
+
+    ','  shift, and go to state 91
+    ')'  shift, and go to state 92
+
+
+State 58
+
+   18 tensor_dims: tensor_dims ',' tINTEGER •
+
+    $default  reduce using rule 18 (tensor_dims)
+
+
+State 59
+
+   85 expr: tIDENTIFIER '(' • exprs ')'
+   86     | tIDENTIFIER '(' • ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ')'          shift, and go to state 93
+
+    exprs           go to state 94
+    expr            go to state 67
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 60
+
+   64 expr: tOBJECTS '(' • expr ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 95
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 61
+
+   65 expr: tSIZEOF '(' • expr ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 96
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 62
+
+   68 expr: '~' expr •
+   70     | expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 68 (expr)
+
+
+State 63
+
+   66 expr: '+' expr •
+   70     | expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    '@'  shift, and go to state 82
+    '.'  shift, and go to state 83
+    '['  shift, and go to state 84
+
+    $default  reduce using rule 66 (expr)
+
+
+State 64
+
+   67 expr: '-' expr •
+   70     | expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    '@'  shift, and go to state 82
+    '.'  shift, and go to state 83
+    '['  shift, and go to state 84
+
+    $default  reduce using rule 67 (expr)
+
+
+State 65
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   84     | '(' expr • ')'
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ')'        shift, and go to state 97
+
+
+State 66
+
+   55 exprs: exprs • ',' expr
+   56      | exprs • expr
+  105 tensor_literal: '[' exprs • ']'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ','          shift, and go to state 98
+    ']'          shift, and go to state 99
+
+    expr            go to state 100
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 67
+
+   54 exprs: expr •
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    '+'       [reduce using rule 54 (exprs)]
+    '-'       [reduce using rule 54 (exprs)]
+    '['       [reduce using rule 54 (exprs)]
+    $default  reduce using rule 54 (exprs)
+
+
+State 68
+
+   75 expr: expr tCONTRACT • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 101
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 69
+
+   79 expr: expr tGE • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 102
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 70
+
+   78 expr: expr tLE • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 103
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 71
+
+   80 expr: expr tEQ • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 104
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 72
+
+   83 expr: expr tNE • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 105
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 73
+
+   82 expr: expr tOR • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 106
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 74
+
+   81 expr: expr tAND • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 107
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 75
+
+   76 expr: expr '<' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 108
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 76
+
+   77 expr: expr '>' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 109
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 77
+
+   70 expr: expr '+' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 110
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 78
+
+   71 expr: expr '-' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 111
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 79
+
+   72 expr: expr '*' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 112
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 80
+
+   73 expr: expr '/' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 113
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 81
+
+   74 expr: expr '%' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 114
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 82
+
+  108 lval: expr '@' • '(' exprs ')'
+
+    '('  shift, and go to state 115
+
+
+State 83
+
+   87 expr: expr '.' • tCAPACITY
+   88     | expr '.' • tRANK
+   89     | expr '.' • tDIMS
+   90     | expr '.' • tDIM '(' expr ')'
+   91     | expr '.' • tRESHAPE '(' reshape_dims ')'
+
+    tCAPACITY  shift, and go to state 116
+    tRANK      shift, and go to state 117
+    tDIMS      shift, and go to state 118
+    tDIM       shift, and go to state 119
+    tRESHAPE   shift, and go to state 120
+
+
+State 84
+
+  107 lval: expr '[' • expr ']'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 121
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 85
+
+  104 string: string tSTRING •
+
+    $default  reduce using rule 104 (string)
+
+
+State 86
+
+   61 expr: lval '=' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 122
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 87
+
+   69 expr: lval '?' •
+
+    $default  reduce using rule 69 (expr)
+
+
+State 88
+
+   36 block: '{' • opt_vardecs opt_instructions '}'
+
+    tPUBLIC   shift, and go to state 1
+    tFORWARD  shift, and go to state 2
+
+    tINT          reduce using rule 7 (qualifier_opt)
+    tREAL         reduce using rule 7 (qualifier_opt)
+    tSTRING_TYPE  reduce using rule 7 (qualifier_opt)
+    tTENSOR       reduce using rule 7 (qualifier_opt)
+    tPTR          reduce using rule 7 (qualifier_opt)
+    tVOID         reduce using rule 7 (qualifier_opt)
+    tAUTO         reduce using rule 7 (qualifier_opt)
+    $default      reduce using rule 26 (opt_vardecs)
+
+    qualifier_opt  go to state 55
+    variable_decl  go to state 123
+    vardecs        go to state 124
+    opt_vardecs    go to state 125
+
+
+State 89
+
+   31 function_def: qualifier_opt type tIDENTIFIER '(' ')' block •
+
+    $default  reduce using rule 31 (function_def)
+
+
+State 90
+
+   21 variable_decl: qualifier_opt type • tIDENTIFIER '=' expr
+   22              | qualifier_opt type • tIDENTIFIER
+
+    tIDENTIFIER  shift, and go to state 126
+
+
+State 91
+
+   33 parameters: parameters ',' • variable_decl
+
+    tPUBLIC   shift, and go to state 1
+    tFORWARD  shift, and go to state 2
+
+    $default  reduce using rule 7 (qualifier_opt)
+
+    qualifier_opt  go to state 55
+    variable_decl  go to state 127
+
+
+State 92
+
+   28 function_decl: qualifier_opt type tIDENTIFIER '(' parameters ')' •
+   30 function_def: qualifier_opt type tIDENTIFIER '(' parameters ')' • block
+
+    '{'  shift, and go to state 88
+
+    $default  reduce using rule 28 (function_decl)
+
+    block  go to state 128
+
+
+State 93
+
+   86 expr: tIDENTIFIER '(' ')' •
+
+    $default  reduce using rule 86 (expr)
+
+
+State 94
+
+   55 exprs: exprs • ',' expr
+   56      | exprs • expr
+   85 expr: tIDENTIFIER '(' exprs • ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ','          shift, and go to state 98
+    ')'          shift, and go to state 129
+
+    expr            go to state 100
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 95
+
+   64 expr: tOBJECTS '(' expr • ')'
+   70     | expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ')'        shift, and go to state 130
+
+
+State 96
+
+   65 expr: tSIZEOF '(' expr • ')'
+   70     | expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ')'        shift, and go to state 131
+
+
+State 97
+
+   84 expr: '(' expr ')' •
+
+    $default  reduce using rule 84 (expr)
+
+
+State 98
+
+   55 exprs: exprs ',' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 132
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 99
+
+  105 tensor_literal: '[' exprs ']' •
+
+    $default  reduce using rule 105 (tensor_literal)
+
+
+State 100
+
+   56 exprs: exprs expr •
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    '+'       [reduce using rule 56 (exprs)]
+    '-'       [reduce using rule 56 (exprs)]
+    '['       [reduce using rule 56 (exprs)]
+    $default  reduce using rule 56 (exprs)
+
+
+State 101
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   75     | expr tCONTRACT expr •
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 75 (expr)
+
+
+State 102
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   79     | expr tGE expr •
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 79 (expr)
+
+
+State 103
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   78     | expr tLE expr •
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 78 (expr)
+
+
+State 104
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   80     | expr tEQ expr •
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 80 (expr)
+
+
+State 105
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   83     | expr tNE expr •
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 83 (expr)
+
+
+State 106
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   82     | expr tOR expr •
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 82 (expr)
+
+
+State 107
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   81     | expr tAND expr •
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 81 (expr)
+
+
+State 108
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   76     | expr '<' expr •
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 76 (expr)
+
+
+State 109
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   77     | expr '>' expr •
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 77 (expr)
+
+
+State 110
+
+   70 expr: expr • '+' expr
+   70     | expr '+' expr •
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 70 (expr)
+
+
+State 111
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   71     | expr '-' expr •
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 71 (expr)
+
+
+State 112
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   72     | expr '*' expr •
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    '@'  shift, and go to state 82
+    '.'  shift, and go to state 83
+    '['  shift, and go to state 84
+
+    $default  reduce using rule 72 (expr)
+
+
+State 113
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   73     | expr '/' expr •
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    '@'  shift, and go to state 82
+    '.'  shift, and go to state 83
+    '['  shift, and go to state 84
+
+    $default  reduce using rule 73 (expr)
+
+
+State 114
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   74     | expr '%' expr •
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    '@'  shift, and go to state 82
+    '.'  shift, and go to state 83
+    '['  shift, and go to state 84
+
+    $default  reduce using rule 74 (expr)
+
+
+State 115
+
+  108 lval: expr '@' '(' • exprs ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    exprs           go to state 133
+    expr            go to state 67
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 116
+
+   87 expr: expr '.' tCAPACITY •
+
+    $default  reduce using rule 87 (expr)
+
+
+State 117
+
+   88 expr: expr '.' tRANK •
+
+    $default  reduce using rule 88 (expr)
+
+
+State 118
+
+   89 expr: expr '.' tDIMS •
+
+    $default  reduce using rule 89 (expr)
+
+
+State 119
+
+   90 expr: expr '.' tDIM • '(' expr ')'
+
+    '('  shift, and go to state 134
+
+
+State 120
+
+   91 expr: expr '.' tRESHAPE • '(' reshape_dims ')'
+
+    '('  shift, and go to state 135
+
+
+State 121
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  107     | expr '[' expr • ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ']'        shift, and go to state 136
+
+
+State 122
+
+   61 expr: lval '=' expr •
+   70     | expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 61 (expr)
+
+
+State 123
+
+   24 vardecs: variable_decl • ';'
+
+    ';'  shift, and go to state 137
+
+
+State 124
+
+   25 vardecs: vardecs • variable_decl ';'
+   27 opt_vardecs: vardecs •
+
+    tPUBLIC   shift, and go to state 1
+    tFORWARD  shift, and go to state 2
+
+    tINT          reduce using rule 7 (qualifier_opt)
+    tREAL         reduce using rule 7 (qualifier_opt)
+    tSTRING_TYPE  reduce using rule 7 (qualifier_opt)
+    tTENSOR       reduce using rule 7 (qualifier_opt)
+    tPTR          reduce using rule 7 (qualifier_opt)
+    tVOID         reduce using rule 7 (qualifier_opt)
+    tAUTO         reduce using rule 7 (qualifier_opt)
+    $default      reduce using rule 27 (opt_vardecs)
+
+    qualifier_opt  go to state 55
+    variable_decl  go to state 138
+
+
+State 125
+
+   36 block: '{' opt_vardecs • opt_instructions '}'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tIF          shift, and go to state 139
+    tFOR         shift, and go to state 140
+    tBREAK       shift, and go to state 141
+    tCONTINUE    shift, and go to state 142
+    tRETURN      shift, and go to state 143
+    tWRITE       shift, and go to state 144
+    tWRITELN     shift, and go to state 145
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    '{'          shift, and go to state 88
+
+    $default  reduce using rule 34 (opt_instructions)
+
+    opt_instructions  go to state 146
+    block             go to state 147
+    stmts             go to state 148
+    stmt              go to state 149
+    return            go to state 150
+    expr              go to state 151
+    literal           go to state 49
+    string            go to state 50
+    tensor_literal    go to state 51
+    lval              go to state 52
+
+
+State 126
+
+   21 variable_decl: qualifier_opt type tIDENTIFIER • '=' expr
+   22              | qualifier_opt type tIDENTIFIER •
+
+    '='  shift, and go to state 30
+
+    $default  reduce using rule 22 (variable_decl)
+
+
+State 127
+
+   33 parameters: parameters ',' variable_decl •
+
+    $default  reduce using rule 33 (parameters)
+
+
+State 128
+
+   30 function_def: qualifier_opt type tIDENTIFIER '(' parameters ')' block •
+
+    $default  reduce using rule 30 (function_def)
+
+
+State 129
+
+   85 expr: tIDENTIFIER '(' exprs ')' •
+
+    $default  reduce using rule 85 (expr)
+
+
+State 130
+
+   64 expr: tOBJECTS '(' expr ')' •
+
+    $default  reduce using rule 64 (expr)
+
+
+State 131
+
+   65 expr: tSIZEOF '(' expr ')' •
+
+    $default  reduce using rule 65 (expr)
+
+
+State 132
+
+   55 exprs: exprs ',' expr •
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    '+'       [reduce using rule 55 (exprs)]
+    '-'       [reduce using rule 55 (exprs)]
+    '['       [reduce using rule 55 (exprs)]
+    $default  reduce using rule 55 (exprs)
+
+
+State 133
+
+   55 exprs: exprs • ',' expr
+   56      | exprs • expr
+  108 lval: expr '@' '(' exprs • ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ','          shift, and go to state 98
+    ')'          shift, and go to state 152
+
+    expr            go to state 100
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 134
+
+   90 expr: expr '.' tDIM '(' • expr ')'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 153
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 135
+
+   91 expr: expr '.' tRESHAPE '(' • reshape_dims ')'
+
+    tINTEGER  shift, and go to state 154
+
+    reshape_dims  go to state 155
+
+
+State 136
+
+  107 lval: expr '[' expr ']' •
+
+    $default  reduce using rule 107 (lval)
+
+
+State 137
+
+   24 vardecs: variable_decl ';' •
+
+    $default  reduce using rule 24 (vardecs)
+
+
+State 138
+
+   25 vardecs: vardecs variable_decl • ';'
+
+    ';'  shift, and go to state 156
+
+
+State 139
+
+   45 stmt: tIF • '(' expr ')' stmt
+   46     | tIF • '(' expr ')' stmt elif_chain
+
+    '('  shift, and go to state 157
+
+
+State 140
+
+   47 stmt: tFOR • '(' opt_forinit ';' exprs_opt ';' exprs_opt ')' stmt
+
+    '('  shift, and go to state 158
+
+
+State 141
+
+   42 stmt: tBREAK •
+
+    $default  reduce using rule 42 (stmt)
+
+
+State 142
+
+   43 stmt: tCONTINUE •
+
+    $default  reduce using rule 43 (stmt)
+
+
+State 143
+
+   49 return: tRETURN • ';'
+   50       | tRETURN • expr ';'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ';'          shift, and go to state 159
+
+    expr            go to state 160
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 144
+
+   40 stmt: tWRITE • exprs ';'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    exprs           go to state 161
+    expr            go to state 67
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 145
+
+   41 stmt: tWRITELN • exprs ';'
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    exprs           go to state 162
+    expr            go to state 67
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 146
+
+   36 block: '{' opt_vardecs opt_instructions • '}'
+
+    '}'  shift, and go to state 163
+
+
+State 147
+
+   48 stmt: block •
+
+    $default  reduce using rule 48 (stmt)
+
+
+State 148
+
+   35 opt_instructions: stmts •
+   38 stmts: stmts • stmt
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tIF          shift, and go to state 139
+    tFOR         shift, and go to state 140
+    tBREAK       shift, and go to state 141
+    tCONTINUE    shift, and go to state 142
+    tRETURN      shift, and go to state 143
+    tWRITE       shift, and go to state 144
+    tWRITELN     shift, and go to state 145
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    '{'          shift, and go to state 88
+
+    $default  reduce using rule 35 (opt_instructions)
+
+    block           go to state 147
+    stmt            go to state 164
+    return          go to state 150
+    expr            go to state 151
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 149
+
+   37 stmts: stmt •
+
+    $default  reduce using rule 37 (stmts)
+
+
+State 150
+
+   44 stmt: return •
+
+    $default  reduce using rule 44 (stmt)
+
+
+State 151
+
+   39 stmt: expr • ';'
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ';'        shift, and go to state 165
+
+
+State 152
+
+  108 lval: expr '@' '(' exprs ')' •
+
+    $default  reduce using rule 108 (lval)
+
+
+State 153
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   90     | expr '.' tDIM '(' expr • ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ')'        shift, and go to state 166
+
+
+State 154
+
+   19 reshape_dims: tINTEGER •
+
+    $default  reduce using rule 19 (reshape_dims)
+
+
+State 155
+
+   20 reshape_dims: reshape_dims • ',' tINTEGER
+   91 expr: expr '.' tRESHAPE '(' reshape_dims • ')'
+
+    ','  shift, and go to state 167
+    ')'  shift, and go to state 168
+
+
+State 156
+
+   25 vardecs: vardecs variable_decl ';' •
+
+    $default  reduce using rule 25 (vardecs)
+
+
+State 157
+
+   45 stmt: tIF '(' • expr ')' stmt
+   46     | tIF '(' • expr ')' stmt elif_chain
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 169
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 158
+
+   47 stmt: tFOR '(' • opt_forinit ';' exprs_opt ';' exprs_opt ')' stmt
+
+    tINTEGER      shift, and go to state 35
+    tDOUBLE       shift, and go to state 36
+    tIDENTIFIER   shift, and go to state 37
+    tSTRING       shift, and go to state 38
+    tINT          shift, and go to state 12
+    tREAL         shift, and go to state 13
+    tSTRING_TYPE  shift, and go to state 14
+    tTENSOR       shift, and go to state 15
+    tPTR          shift, and go to state 16
+    tVOID         shift, and go to state 17
+    tAUTO         shift, and go to state 170
+    tINPUT        shift, and go to state 39
+    tNULLPTR      shift, and go to state 40
+    tOBJECTS      shift, and go to state 41
+    tSIZEOF       shift, and go to state 42
+    '~'           shift, and go to state 43
+    '+'           shift, and go to state 44
+    '-'           shift, and go to state 45
+    '('           shift, and go to state 46
+    '['           shift, and go to state 47
+
+    $default  reduce using rule 99 (opt_forinit)
+
+    type            go to state 171
+    exprs           go to state 172
+    expr            go to state 67
+    literal         go to state 49
+    fordec          go to state 173
+    fordecs         go to state 174
+    opt_forinit     go to state 175
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 159
+
+   49 return: tRETURN ';' •
+
+    $default  reduce using rule 49 (return)
+
+
+State 160
+
+   50 return: tRETURN expr • ';'
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ';'        shift, and go to state 176
+
+
+State 161
+
+   40 stmt: tWRITE exprs • ';'
+   55 exprs: exprs • ',' expr
+   56      | exprs • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ';'          shift, and go to state 177
+    ','          shift, and go to state 98
+
+    expr            go to state 100
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 162
+
+   41 stmt: tWRITELN exprs • ';'
+   55 exprs: exprs • ',' expr
+   56      | exprs • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ';'          shift, and go to state 178
+    ','          shift, and go to state 98
+
+    expr            go to state 100
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 163
+
+   36 block: '{' opt_vardecs opt_instructions '}' •
+
+    $default  reduce using rule 36 (block)
+
+
+State 164
+
+   38 stmts: stmts stmt •
+
+    $default  reduce using rule 38 (stmts)
+
+
+State 165
+
+   39 stmt: expr ';' •
+
+    $default  reduce using rule 39 (stmt)
+
+
+State 166
+
+   90 expr: expr '.' tDIM '(' expr ')' •
+
+    $default  reduce using rule 90 (expr)
+
+
+State 167
+
+   20 reshape_dims: reshape_dims ',' • tINTEGER
+
+    tINTEGER  shift, and go to state 179
+
+
+State 168
+
+   91 expr: expr '.' tRESHAPE '(' reshape_dims ')' •
+
+    $default  reduce using rule 91 (expr)
+
+
+State 169
+
+   45 stmt: tIF '(' expr • ')' stmt
+   46     | tIF '(' expr • ')' stmt elif_chain
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ')'        shift, and go to state 180
+
+
+State 170
+
+   14 type: tAUTO •
+  101 opt_forinit: tAUTO • tIDENTIFIER '=' expr
+
+    tIDENTIFIER  shift, and go to state 181
+
+    tIDENTIFIER  [reduce using rule 14 (type)]
+
+
+State 171
+
+   96 fordec: type • tIDENTIFIER '=' expr
+
+    tIDENTIFIER  shift, and go to state 182
+
+
+State 172
+
+   55 exprs: exprs • ',' expr
+   56      | exprs • expr
+  102 opt_forinit: exprs •
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ','          shift, and go to state 98
+
+    $default  reduce using rule 102 (opt_forinit)
+
+    expr            go to state 100
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 173
+
+   97 fordecs: fordec •
+
+    $default  reduce using rule 97 (fordecs)
+
+
+State 174
+
+   98 fordecs: fordecs • ',' fordec
+  100 opt_forinit: fordecs •
+
+    ','  shift, and go to state 183
+
+    $default  reduce using rule 100 (opt_forinit)
+
+
+State 175
+
+   47 stmt: tFOR '(' opt_forinit • ';' exprs_opt ';' exprs_opt ')' stmt
+
+    ';'  shift, and go to state 184
+
+
+State 176
+
+   50 return: tRETURN expr ';' •
+
+    $default  reduce using rule 50 (return)
+
+
+State 177
+
+   40 stmt: tWRITE exprs ';' •
+
+    $default  reduce using rule 40 (stmt)
+
+
+State 178
+
+   41 stmt: tWRITELN exprs ';' •
+
+    $default  reduce using rule 41 (stmt)
+
+
+State 179
+
+   20 reshape_dims: reshape_dims ',' tINTEGER •
+
+    $default  reduce using rule 20 (reshape_dims)
+
+
+State 180
+
+   45 stmt: tIF '(' expr ')' • stmt
+   46     | tIF '(' expr ')' • stmt elif_chain
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tIF          shift, and go to state 139
+    tFOR         shift, and go to state 140
+    tBREAK       shift, and go to state 141
+    tCONTINUE    shift, and go to state 142
+    tRETURN      shift, and go to state 143
+    tWRITE       shift, and go to state 144
+    tWRITELN     shift, and go to state 145
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    '{'          shift, and go to state 88
+
+    block           go to state 147
+    stmt            go to state 185
+    return          go to state 150
+    expr            go to state 151
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 181
+
+  101 opt_forinit: tAUTO tIDENTIFIER • '=' expr
+
+    '='  shift, and go to state 186
+
+
+State 182
+
+   96 fordec: type tIDENTIFIER • '=' expr
+
+    '='  shift, and go to state 187
+
+
+State 183
+
+   98 fordecs: fordecs ',' • fordec
+
+    tINT          shift, and go to state 12
+    tREAL         shift, and go to state 13
+    tSTRING_TYPE  shift, and go to state 14
+    tTENSOR       shift, and go to state 15
+    tPTR          shift, and go to state 16
+    tVOID         shift, and go to state 17
+    tAUTO         shift, and go to state 27
+
+    type    go to state 171
+    fordec  go to state 188
+
+
+State 184
+
+   47 stmt: tFOR '(' opt_forinit ';' • exprs_opt ';' exprs_opt ')' stmt
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    $default  reduce using rule 57 (exprs_opt)
+
+    exprs           go to state 189
+    exprs_opt       go to state 190
+    expr            go to state 67
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 185
+
+   45 stmt: tIF '(' expr ')' stmt •
+   46     | tIF '(' expr ')' stmt • elif_chain
+
+    tELIF  shift, and go to state 191
+    tELSE  shift, and go to state 192
+
+    $default  reduce using rule 45 (stmt)
+
+    elif_chain  go to state 193
+
+
+State 186
+
+  101 opt_forinit: tAUTO tIDENTIFIER '=' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 194
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 187
+
+   96 fordec: type tIDENTIFIER '=' • expr
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 195
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 188
+
+   98 fordecs: fordecs ',' fordec •
+
+    $default  reduce using rule 98 (fordecs)
+
+
+State 189
+
+   55 exprs: exprs • ',' expr
+   56      | exprs • expr
+   58 exprs_opt: exprs •
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    ','          shift, and go to state 98
+
+    $default  reduce using rule 58 (exprs_opt)
+
+    expr            go to state 100
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 190
+
+   47 stmt: tFOR '(' opt_forinit ';' exprs_opt • ';' exprs_opt ')' stmt
+
+    ';'  shift, and go to state 196
+
+
+State 191
+
+   51 elif_chain: tELIF • '(' expr ')' stmt
+   52           | tELIF • '(' expr ')' stmt elif_chain
+
+    '('  shift, and go to state 197
+
+
+State 192
+
+   53 elif_chain: tELSE • stmt
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tIF          shift, and go to state 139
+    tFOR         shift, and go to state 140
+    tBREAK       shift, and go to state 141
+    tCONTINUE    shift, and go to state 142
+    tRETURN      shift, and go to state 143
+    tWRITE       shift, and go to state 144
+    tWRITELN     shift, and go to state 145
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    '{'          shift, and go to state 88
+
+    block           go to state 147
+    stmt            go to state 198
+    return          go to state 150
+    expr            go to state 151
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 193
+
+   46 stmt: tIF '(' expr ')' stmt elif_chain •
+
+    $default  reduce using rule 46 (stmt)
+
+
+State 194
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  101 opt_forinit: tAUTO tIDENTIFIER '=' expr •
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 101 (opt_forinit)
+
+
+State 195
+
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+   96 fordec: type tIDENTIFIER '=' expr •
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+
+    $default  reduce using rule 96 (fordec)
+
+
+State 196
+
+   47 stmt: tFOR '(' opt_forinit ';' exprs_opt ';' • exprs_opt ')' stmt
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    $default  reduce using rule 57 (exprs_opt)
+
+    exprs           go to state 189
+    exprs_opt       go to state 199
+    expr            go to state 67
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 197
+
+   51 elif_chain: tELIF '(' • expr ')' stmt
+   52           | tELIF '(' • expr ')' stmt elif_chain
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+
+    expr            go to state 200
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 198
+
+   53 elif_chain: tELSE stmt •
+
+    $default  reduce using rule 53 (elif_chain)
+
+
+State 199
+
+   47 stmt: tFOR '(' opt_forinit ';' exprs_opt ';' exprs_opt • ')' stmt
+
+    ')'  shift, and go to state 201
+
+
+State 200
+
+   51 elif_chain: tELIF '(' expr • ')' stmt
+   52           | tELIF '(' expr • ')' stmt elif_chain
+   70 expr: expr • '+' expr
+   71     | expr • '-' expr
+   72     | expr • '*' expr
+   73     | expr • '/' expr
+   74     | expr • '%' expr
+   75     | expr • tCONTRACT expr
+   76     | expr • '<' expr
+   77     | expr • '>' expr
+   78     | expr • tLE expr
+   79     | expr • tGE expr
+   80     | expr • tEQ expr
+   81     | expr • tAND expr
+   82     | expr • tOR expr
+   83     | expr • tNE expr
+   87     | expr • '.' tCAPACITY
+   88     | expr • '.' tRANK
+   89     | expr • '.' tDIMS
+   90     | expr • '.' tDIM '(' expr ')'
+   91     | expr • '.' tRESHAPE '(' reshape_dims ')'
+  107 lval: expr • '[' expr ']'
+  108     | expr • '@' '(' exprs ')'
+
+    tCONTRACT  shift, and go to state 68
+    tGE        shift, and go to state 69
+    tLE        shift, and go to state 70
+    tEQ        shift, and go to state 71
+    tNE        shift, and go to state 72
+    tOR        shift, and go to state 73
+    tAND       shift, and go to state 74
+    '<'        shift, and go to state 75
+    '>'        shift, and go to state 76
+    '+'        shift, and go to state 77
+    '-'        shift, and go to state 78
+    '*'        shift, and go to state 79
+    '/'        shift, and go to state 80
+    '%'        shift, and go to state 81
+    '@'        shift, and go to state 82
+    '.'        shift, and go to state 83
+    '['        shift, and go to state 84
+    ')'        shift, and go to state 202
+
+
+State 201
+
+   47 stmt: tFOR '(' opt_forinit ';' exprs_opt ';' exprs_opt ')' • stmt
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tIF          shift, and go to state 139
+    tFOR         shift, and go to state 140
+    tBREAK       shift, and go to state 141
+    tCONTINUE    shift, and go to state 142
+    tRETURN      shift, and go to state 143
+    tWRITE       shift, and go to state 144
+    tWRITELN     shift, and go to state 145
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    '{'          shift, and go to state 88
+
+    block           go to state 147
+    stmt            go to state 203
+    return          go to state 150
+    expr            go to state 151
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 202
+
+   51 elif_chain: tELIF '(' expr ')' • stmt
+   52           | tELIF '(' expr ')' • stmt elif_chain
+
+    tINTEGER     shift, and go to state 35
+    tDOUBLE      shift, and go to state 36
+    tIDENTIFIER  shift, and go to state 37
+    tSTRING      shift, and go to state 38
+    tIF          shift, and go to state 139
+    tFOR         shift, and go to state 140
+    tBREAK       shift, and go to state 141
+    tCONTINUE    shift, and go to state 142
+    tRETURN      shift, and go to state 143
+    tWRITE       shift, and go to state 144
+    tWRITELN     shift, and go to state 145
+    tINPUT       shift, and go to state 39
+    tNULLPTR     shift, and go to state 40
+    tOBJECTS     shift, and go to state 41
+    tSIZEOF      shift, and go to state 42
+    '~'          shift, and go to state 43
+    '+'          shift, and go to state 44
+    '-'          shift, and go to state 45
+    '('          shift, and go to state 46
+    '['          shift, and go to state 47
+    '{'          shift, and go to state 88
+
+    block           go to state 147
+    stmt            go to state 204
+    return          go to state 150
+    expr            go to state 151
+    literal         go to state 49
+    string          go to state 50
+    tensor_literal  go to state 51
+    lval            go to state 52
+
+
+State 203
+
+   47 stmt: tFOR '(' opt_forinit ';' exprs_opt ';' exprs_opt ')' stmt •
+
+    $default  reduce using rule 47 (stmt)
+
+
+State 204
+
+   51 elif_chain: tELIF '(' expr ')' stmt •
+   52           | tELIF '(' expr ')' stmt • elif_chain
+
+    tELIF  shift, and go to state 191
+    tELSE  shift, and go to state 192
+
+    $default  reduce using rule 51 (elif_chain)
+
+    elif_chain  go to state 205
+
+
+State 205
+
+   52 elif_chain: tELIF '(' expr ')' stmt elif_chain •
+
+    $default  reduce using rule 52 (elif_chain)

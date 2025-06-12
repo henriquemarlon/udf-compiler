@@ -3,6 +3,8 @@
 #include "targets/basic_ast_visitor.h"
 
 #include <sstream>
+#include <set>
+#include <stack>
 #include <cdk/emitters/basic_postfix_emitter.h>
 
 namespace udf {
@@ -12,9 +14,18 @@ namespace udf {
   //!
   class postfix_writer: public basic_ast_visitor {
     cdk::symbol_table<udf::symbol> &_symtab;
+    std::set<std::string> _functions_to_declare;
     cdk::basic_postfix_emitter &_pf;
+    std::shared_ptr<udf::symbol> _function;
+    std::stack<int> _forIni, _forStep, _forEnd; 
     int _lbl;
-
+    bool _errors, _inFunction, _inFunctionName, _inFunctionArgs, _inFunctionBody;
+    std::string _currentFunctionName;
+    std::string _currentBodyRetLabel;
+    int _offset; 
+    bool _returnSeen;
+    cdk::typename_type _lvalueType;
+    
   public:
     postfix_writer(std::shared_ptr<cdk::compiler> compiler, cdk::symbol_table<udf::symbol> &symtab,
                    cdk::basic_postfix_emitter &pf) :
@@ -37,6 +48,10 @@ namespace udf {
       return oss.str();
     }
 
+    void error(int lineno, std::string s) {
+      std::cerr << "error: " << lineno << ": " << s << std::endl;
+    }
+
   public:
   // do not edit these lines
 #define __IN_VISITOR_HEADER__
@@ -47,3 +62,4 @@ namespace udf {
   };
 
 } // udf
+
